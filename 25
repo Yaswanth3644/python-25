@@ -1,0 +1,31 @@
+import sys
+
+# Read number of test cases
+t = int(sys.stdin.readline().strip())
+
+for _ in range(t):
+    a, b, c = map(int, sys.stdin.readline().split())
+
+    ans = 0
+    found = False  # Flag to check if we found a valid X
+
+    for i in range(29, -1, -1):
+        x = (1 << i) ^ a
+        y = (1 << i) ^ b
+        z = (1 << i) ^ c
+
+        # Check the conditions for the current bits
+        if x < y and y < z:
+            ans ^= (1 << i)
+            found = True  # We found a valid condition
+            a, b, c = x, y, z  # Update a, b, c with new values
+            break  # Exit the loop as we've found a valid X
+
+        elif x < min(y, z) or max(x, y) < z:
+            a, b, c = x, y, z
+            ans ^= (1 << i)
+
+    if a < b and b < c:
+        print(ans)
+    else:
+        print("-1")
